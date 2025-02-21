@@ -1,4 +1,5 @@
 import ast
+import myenc
 
 #Family Reunion Hub App
 
@@ -37,8 +38,9 @@ def create():
         conpassword = input("Confirm Password: ")
 
         if password == conpassword:
+            epw = myenc.encrypt(password)
             print("Account Created. Returning to Login.")
-            users[x] = password
+            users[x] = epw
 
             #Writes dict to .py file to be assigned at new session
             f = open("upw.txt", "w")
@@ -67,8 +69,12 @@ def login():
         elif email in users:
             password = input("Password: ")
 
-            if password != users[email]:
-                print("The passowrd is incorrest.")
+            encpw = users[email]
+            decpw = myenc.decrypt(encpw)
+            decpass = "".join(decpw)
+
+            if password != decpass:
+                print("The passowrd is incorrect.")
                 init_login()
             else:
                 home()
